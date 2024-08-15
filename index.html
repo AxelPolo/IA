@@ -1,9 +1,21 @@
 <html><head><base href="https://every-ai-chat-free.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chatea con IA en fase BETA</title><style>
+:root {
+  --primary-color: #10a37f;
+  --secondary-color: #1a7f64;
+  --background-color: #f0f4f8;
+  --chat-background: #ffffff;
+  --sidebar-background: #e2e8f0;
+  --text-color: #2d3748;
+  --message-user-bg: #e2f0ff;
+  --message-ai-bg: #f0fff4;
+  --button-color: #4a5568;
+}
+
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #343541;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
   height: 100%;
   overflow: hidden;
 }
@@ -14,12 +26,12 @@ body, html {
 }
 
 .sidebar {
-  width: 250px;
-  min-width: 250px;
-  background-color: #202123;
-  color: white;
+  width: 300px;
+  background-color: var(--sidebar-background);
+  color: var(--text-color);
   padding: 20px;
   overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .main-content {
@@ -33,105 +45,128 @@ body, html {
 .header {
   text-align: center;
   margin-bottom: 20px;
-  color: white;
+  color: var(--text-color);
   position: relative;
 }
 
 .header h1 {
   margin-top: 0;
   margin-bottom: 10px;
+  font-size: 2.5em;
+  color: var(--primary-color);
 }
 
 .chat-area {
   flex-grow: 1;
-  background-color: #40414f;
-  border-radius: 5px;
-  padding: 15px;
+  background-color: var(--chat-background);
+  border-radius: 10px;
+  padding: 20px;
   overflow-y: auto;
   margin-bottom: 20px;
-  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .footer {
   text-align: center;
-  font-size: 12px;
-  color: white;
+  font-size: 14px;
+  color: var(--text-color);
   margin-top: 10px;
 }
 
 #userInput {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #40414f;
-  color: white;
-  border: 1px solid #565869;
-  border-radius: 5px;
-  resize: vertical;
-  min-height: 50px;
-  max-height: 200px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #ffffff;
+  color: var(--text-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 25px;
+  resize: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+#userInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.3);
 }
 
 #sendButton {
   width: 100%;
-  padding: 10px;
-  background-color: #10a37f;
+  padding: 15px;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
-  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 #sendButton:hover {
-  background-color: #1a7f64;
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
 }
 
 #modelSelect {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #40414f;
-  color: white;
-  border: 1px solid #565869;
-  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #ffffff;
+  color: var(--text-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 25px;
+  font-size: 16px;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 15px top 50%;
+  background-size: 12px auto;
 }
 
 .created-by {
   position: absolute;
   bottom: 10px;
   right: 20px;
-  font-size: 12px;
-  color: #ffffff;
+  font-size: 14px;
+  color: var(--text-color);
 }
 
 .message {
-  margin-bottom: 10px;
-  padding: 8px;
-  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 10px;
   word-wrap: break-word;
+  max-width: 80%;
+  position: relative;
 }
 
 .user {
-  background-color: #2a2b32;
+  background-color: var(--message-user-bg);
+  align-self: flex-end;
+  margin-left: auto;
 }
 
 .assistant {
-  background-color: #343541;
+  background-color: var(--message-ai-bg);
+  align-self: flex-start;
 }
 
 .system {
-  background-color: #444654;
+  background-color: #f8f8f8;
   font-style: italic;
+  text-align: center;
+  max-width: 100%;
 }
 
 .loading-spinner {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid #ffffff;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(16, 163, 127, 0.3);
   border-radius: 50%;
-  border-top: 3px solid #10a37f;
+  border-top: 3px solid var(--primary-color);
   animation: spin 1s linear infinite;
 }
 
@@ -142,80 +177,89 @@ body, html {
 
 .chat-history-item {
   cursor: pointer;
-  padding: 10px;
-  margin-bottom: 5px;
-  background-color: #2a2b32;
-  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .chat-history-item:hover {
-  background-color: #40414f;
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
 }
 
 .chat-history-item.selected {
-  background-color: #40414f;
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .chat-history-buttons {
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
 .chat-history-button {
-  background-color: #565869;
+  background-color: var(--button-color);
   color: white;
   border: none;
-  border-radius: 3px;
-  padding: 3px 6px;
-  font-size: 10px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .chat-history-button:hover {
-  background-color: #6e7087;
+  background-color: var(--secondary-color);
 }
 
 .new-chat-button {
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   margin-bottom: 20px;
-  background-color: #10a37f;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .new-chat-button:hover {
-  background-color: #1a7f64;
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
 }
 
 #debugButton {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #565869;
+  background-color: var(--button-color);
   color: white;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 #debugButton:hover {
-  background-color: #6e7087;
+  background-color: var(--secondary-color);
 }
 
 .eyeball-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   padding: 0 5px;
 }
 
@@ -225,17 +269,18 @@ body, html {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #40414f;
-  padding: 20px;
-  border-radius: 5px;
+  background-color: var(--chat-background);
+  padding: 30px;
+  border-radius: 10px;
   z-index: 1000;
   max-width: 80%;
   max-height: 80%;
   overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .popup-content {
-  color: white;
+  color: var(--text-color);
   white-space: pre-wrap;
 }
 
@@ -245,8 +290,8 @@ body, html {
   right: 10px;
   background: none;
   border: none;
-  color: white;
-  font-size: 20px;
+  color: var(--text-color);
+  font-size: 24px;
   cursor: pointer;
 }
 
@@ -268,19 +313,19 @@ body, html {
   </div>
   <div class="main-content">
     <div class="header">
-      <h1>Chatea con IA en fase BETA </h1>
+      <h1>IA Asistente BETA</h1>
       <button id="debugButton">Depurar</button>
     </div>
     <div class="chat-area" id="chat-area">
       <!-- Los mensajes del chat se insertarán aquí -->
     </div>
-    <textarea id="userInput" placeholder="Escribe tu mensaje aquí..."></textarea>
+    <textarea id="userInput" placeholder="Escribe tu mensaje aquí..." rows="3"></textarea>
     <button id="sendButton">Enviar</button>
     <select id="modelSelect">
       <option value="">Cargando modelos...</option>
     </select>
     <div class="footer">
-      Chatea con IA en fase BETA. Vista previa de investigación gratuita. Nuestro objetivo es hacer que los sistemas de IA sean más naturales y seguros para interactuar. Tu retroalimentación nos ayudará a mejorar.
+      IA Asistente en fase BETA. Vista previa de investigación gratuita. Nuestro objetivo es hacer que los sistemas de IA sean más naturales y seguros para interactuar. Tu retroalimentación nos ayudará a mejorar.
     </div>
     <div class="created-by">Creado por Axel Polo</div>
   </div>
@@ -315,9 +360,16 @@ function addMessage(role, content) {
   if (currentChatId) {
     let chats = JSON.parse(localStorage.getItem('aiChats')) || {};
     if (!chats[currentChatId]) {
-      chats[currentChatId] = { messages: [], name: `Chat ${currentChatId.substr(0, 6)}...` };
+      chats[currentChatId] = { messages: [], name: `Nuevo chat` };
     }
     chats[currentChatId].messages.push({role, content});
+    
+    // Actualizar el nombre del chat basado en el contenido
+    if (role === 'assistant' && chats[currentChatId].messages.length <= 2) {
+      const chatName = content.split('.')[0].substring(0, 30) + '...';
+      chats[currentChatId].name = chatName;
+    }
+    
     localStorage.setItem('aiChats', JSON.stringify(chats));
     updateChatHistory();
   }
@@ -352,19 +404,11 @@ function updateChatHistory() {
     }
     
     const chatName = document.createElement('span');
-    chatName.textContent = chats[chatId].name || `Chat ${chatId.substr(0, 6)}...`;
+    chatName.textContent = chats[chatId].name || `Nuevo chat`;
     chatDiv.appendChild(chatName);
     
     const buttonsDiv = document.createElement('div');
     buttonsDiv.className = 'chat-history-buttons';
-    
-    const renameButton = document.createElement('button');
-    renameButton.textContent = 'Renombrar';
-    renameButton.className = 'chat-history-button';
-    renameButton.onclick = (e) => {
-      e.stopPropagation();
-      renameChat(chatId);
-    };
     
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Eliminar';
@@ -385,7 +429,6 @@ function updateChatHistory() {
       buttonsDiv.appendChild(eyeballButton);
     }
     
-    buttonsDiv.appendChild(renameButton);
     buttonsDiv.appendChild(deleteButton);
     
     chatDiv.appendChild(buttonsDiv);
@@ -404,16 +447,6 @@ function loadChat(chatId) {
   chatArea.innerHTML = '';
   chatMessages.forEach(message => addMessage(message.role, message.content));
   updateChatHistory(); // Actualizar para mostrar el chat seleccionado
-}
-
-function renameChat(chatId) {
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  const newName = prompt('Ingresa un nuevo nombre para el chat:', chats[chatId].name);
-  if (newName !== null) {
-    chats[chatId].name = newName;
-    localStorage.setItem('aiChats', JSON.stringify(chats));
-    updateChatHistory();
-  }
 }
 
 function deleteChat(chatId) {
@@ -549,4 +582,4 @@ if (!currentChatId) {
 // Cerrar popup al hacer clic fuera
 document.getElementById('overlay').addEventListener('click', closePopup);
 </script>
-</body></html> 
+</body></html>
