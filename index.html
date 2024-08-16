@@ -1,585 +1,467 @@
-<html><head><base href="https://every-ai-chat-free.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chatea con IA en fase BETA</title><style>
+<html><head><base href="https://claude.ai/chat">
+<title>PoloGPT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 :root {
-  --primary-color: #10a37f;
-  --secondary-color: #1a7f64;
-  --background-color: #f0f4f8;
-  --chat-background: #ffffff;
-  --sidebar-background: #e2e8f0;
-  --text-color: #2d3748;
-  --message-user-bg: #e2f0ff;
-  --message-ai-bg: #f0fff4;
-  --button-color: #4a5568;
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --chat-bg: #1e1e1e;
+  --user-msg-bg: #2c3e50;
+  --ai-msg-bg: #34495e;
+  --system-msg-bg: #7f8c8d;
+  --input-bg: #2c3e50;
+  --button-bg: #3498db;
+  --button-hover: #2980b9;
+  --code-bg: #2d2d2d;
 }
 
-body, html {
+.light-theme {
+  --bg-color: #f5f7fa;
+  --text-color: #333333;
+  --chat-bg: #ffffff;
+  --user-msg-bg: #e1f5fe;
+  --ai-msg-bg: #f0f4c3;
+  --system-msg-bg: #e8eaf6;
+  --input-bg: #ffffff;
+  --button-bg: #4caf50;
+  --button-hover: #45a049;
+  --code-bg: #f5f5f5;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--background-color);
-  height: 100%;
-  overflow: hidden;
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-}
-
-.sidebar {
-  width: 300px;
-  background-color: var(--sidebar-background);
+  background-color: var(--bg-color);
   color: var(--text-color);
-  padding: 20px;
-  overflow-y: auto;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  font-size: 14px;
 }
 
-.main-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  overflow-y: auto;
+.app-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 20px;
-  color: var(--text-color);
-  position: relative;
-}
-
-.header h1 {
-  margin-top: 0;
   margin-bottom: 10px;
-  font-size: 2.5em;
-  color: var(--primary-color);
-}
-
-.chat-area {
-  flex-grow: 1;
-  background-color: var(--chat-background);
-  border-radius: 10px;
-  padding: 20px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.footer {
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-color);
-  margin-top: 10px;
-}
-
-#userInput {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  background-color: #ffffff;
-  color: var(--text-color);
-  border: 2px solid var(--primary-color);
-  border-radius: 25px;
-  resize: none;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-#userInput:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.3);
-}
-
-#sendButton {
-  width: 100%;
-  padding: 15px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-#sendButton:hover {
-  background-color: var(--secondary-color);
-  transform: translateY(-2px);
-}
-
-#modelSelect {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  background-color: #ffffff;
-  color: var(--text-color);
-  border: 2px solid var(--primary-color);
-  border-radius: 25px;
-  font-size: 16px;
-  appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-  background-repeat: no-repeat;
-  background-position: right 15px top 50%;
-  background-size: 12px auto;
-}
-
-.created-by {
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
-  font-size: 14px;
-  color: var(--text-color);
-}
-
-.message {
-  margin-bottom: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  word-wrap: break-word;
-  max-width: 80%;
-  position: relative;
-}
-
-.user {
-  background-color: var(--message-user-bg);
-  align-self: flex-end;
-  margin-left: auto;
-}
-
-.assistant {
-  background-color: var(--message-ai-bg);
-  align-self: flex-start;
-}
-
-.system {
-  background-color: #f8f8f8;
-  font-style: italic;
-  text-align: center;
-  max-width: 100%;
-}
-
-.loading-spinner {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border: 3px solid rgba(16, 163, 127, 0.3);
-  border-radius: 50%;
-  border-top: 3px solid var(--primary-color);
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.chat-history-item {
-  cursor: pointer;
-  padding: 15px;
-  margin-bottom: 10px;
-  background-color: #ffffff;
-  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.chat-history-item:hover {
-  background-color: #f0f0f0;
-  transform: translateY(-2px);
+.header h1 {
+  font-size: 1.5em;
+  margin: 0;
+  font-weight: 700;
+  color: #3498db;
 }
 
-.chat-history-item.selected {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.chat-history-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.chat-history-button {
-  background-color: var(--button-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.chat-history-button:hover {
-  background-color: var(--secondary-color);
-}
-
-.new-chat-button {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.new-chat-button:hover {
-  background-color: var(--secondary-color);
-  transform: translateY(-2px);
-}
-
-#debugButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: var(--button-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-#debugButton:hover {
-  background-color: var(--secondary-color);
-}
-
-.eyeball-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 0 5px;
-}
-
-.popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--chat-background);
-  padding: 30px;
-  border-radius: 10px;
-  z-index: 1000;
-  max-width: 80%;
-  max-height: 80%;
+.chat-container {
+  background-color: var(--chat-bg);
+  border-radius: 8px;
+  padding: 10px;
+  height: calc(100vh - 150px);
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.popup-content {
-  color: var(--text-color);
-  white-space: pre-wrap;
+.message {
+  margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.95em;
 }
 
-.close-popup {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
+.user { 
+  background-color: var(--user-msg-bg); 
+  text-align: right; 
+  margin-left: 20%;
+}
+
+.ai { 
+  background-color: var(--ai-msg-bg);
+  margin-right: 20%;
+}
+
+.system { 
+  background-color: var(--system-msg-bg); 
+  font-style: italic; 
+  text-align: center;
+  margin: 10px 10%;
+}
+
+.copy-button {
+  background-color: var(--button-bg);
+  color: white;
   border: none;
-  color: var(--text-color);
-  font-size: 24px;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8em;
   cursor: pointer;
+  margin-top: 5px;
+  transition: background-color 0.3s ease;
 }
 
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+.copy-button:hover {
+  background-color: var(--button-hover);
 }
-</style></head><body>
-<div class="container">
-  <div class="sidebar">
-    <button class="new-chat-button" id="newChatButton">Nuevo Chat</button>
-    <div id="chatHistory"></div>
-  </div>
-  <div class="main-content">
-    <div class="header">
-      <h1>IA Asistente BETA</h1>
-      <button id="debugButton">Depurar</button>
-    </div>
-    <div class="chat-area" id="chat-area">
-      <!-- Los mensajes del chat se insertarán aquí -->
-    </div>
-    <textarea id="userInput" placeholder="Escribe tu mensaje aquí..." rows="3"></textarea>
-    <button id="sendButton">Enviar</button>
-    <select id="modelSelect">
-      <option value="">Cargando modelos...</option>
-    </select>
-    <div class="footer">
-      IA Asistente en fase BETA. Vista previa de investigación gratuita. Nuestro objetivo es hacer que los sistemas de IA sean más naturales y seguros para interactuar. Tu retroalimentación nos ayudará a mejorar.
-    </div>
-    <div class="created-by">Creado por Axel Polo</div>
-  </div>
-</div>
 
-<div id="overlay" class="overlay"></div>
-<div id="popup" class="popup">
-  <button class="close-popup" onclick="closePopup()">×</button>
-  <div id="popupContent" class="popup-content"></div>
+.input-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+#user-input {
+  flex-grow: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.95em;
+}
+
+#send-button {
+  padding: 10px 20px;
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+#send-button:hover {
+  background-color: var(--button-hover);
+}
+
+.menu {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+#language-select, #theme-switch {
+  padding: 6px 12px;
+  border-radius: 4px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: none;
+  margin-left: 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#language-select:hover, #theme-switch:hover {
+  opacity: 0.8;
+}
+
+.code-block {
+  background-color: var(--code-bg);
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.code-copy-button {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8em;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background-color 0.3s ease;
+  display: block;
+}
+
+.code-copy-button:hover {
+  background-color: var(--button-hover);
+}
+
+@media (max-width: 600px) {
+  .menu {
+    flex-wrap: wrap;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <h1>PoloGPT</h1>
+    <div class="menu">
+      <select id="language-select">
+        <option value="es" selected>ES</option>
+        <option value="en">EN</option>
+      </select>
+      <select id="theme-switch">
+        <option value="dark" selected>Oscuro</option>
+        <option value="light">Claro</option>
+      </select>
+    </div>
+  </div>
+  
+  <div id="chat-container" class="chat-container"></div>
+  
+  <form class="input-area" id="chat-form">
+    <div class="input-container">
+      <textarea id="user-input" placeholder="Escribe tu mensaje aquí..." rows="1"></textarea>
+      <button id="send-button" type="submit">Enviar</button>
+    </div>
+  </form>
 </div>
 
 <script>
-const systemPrompt = `Eres un asistente de IA. Responde de manera útil, respetuosa y honesta.`;
-let selectedModel = '';
-let currentChatId = null;
-let debugMode = false;
+const chatContainer = document.getElementById('chat-container');
+const userInput = document.getElementById('user-input');
+const chatForm = document.getElementById('chat-form');
+const languageSelect = document.getElementById('language-select');
+const themeSwitch = document.getElementById('theme-switch');
+const sendButton = document.getElementById('send-button');
 
-function generateUniqueId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
+let conversationLog = [];
+let defaultSystemPrompt = "Eres PoloGPT, un asistente virtual profesional y eficiente. Proporciona respuestas claras y concisas, manteniendo un tono formal y respetuoso. Adapta tu estilo para ser informativo y útil. Habla siempre en español.";
+let currentSystemPrompt = defaultSystemPrompt;
+let currentLanguage = 'es';
+let isGenerating = false;
+let controller = null;
 
 function addMessage(role, content) {
-  const chatArea = document.getElementById('chat-area');
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `message ${role}`;
-  const prefix = role === 'user' ? 'Usuario: ' : (role === 'assistant' ? 'IA: ' : '');
-  messageDiv.textContent = prefix + content;
-  chatArea.appendChild(messageDiv);
-  chatArea.scrollTop = chatArea.scrollHeight;
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message', role);
+  chatContainer.appendChild(messageElement);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  return messageElement;
+}
 
-  // Guardar mensaje en el almacenamiento local
-  if (currentChatId) {
-    let chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-    if (!chats[currentChatId]) {
-      chats[currentChatId] = { messages: [], name: `Nuevo chat` };
-    }
-    chats[currentChatId].messages.push({role, content});
-    
-    // Actualizar el nombre del chat basado en el contenido
-    if (role === 'assistant' && chats[currentChatId].messages.length <= 2) {
-      const chatName = content.split('.')[0].substring(0, 30) + '...';
-      chats[currentChatId].name = chatName;
-    }
-    
-    localStorage.setItem('aiChats', JSON.stringify(chats));
-    updateChatHistory();
+async function typeText(element, text) {
+  const cleanedText = text.replace(/\s+/g, ' ');
+  for (let i = 0; i < cleanedText.length; i++) {
+    element.textContent += cleanedText[i];
+    await new Promise(resolve => setTimeout(resolve, 10));
+    chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 }
 
-function addLoadingSpinner() {
-  const chatArea = document.getElementById('chat-area');
-  const spinnerDiv = document.createElement('div');
-  spinnerDiv.className = 'message system';
-  spinnerDiv.innerHTML = 'IA: <div class="loading-spinner"></div>';
-  chatArea.appendChild(spinnerDiv);
-  chatArea.scrollTop = chatArea.scrollHeight;
-  return spinnerDiv;
-}
-
-function startNewChat() {
-  currentChatId = generateUniqueId();
-  document.getElementById('chat-area').innerHTML = '';
-  addMessage('system', '¿Cómo puedo ayudarte hoy?');
-  updateChatHistory();
-}
-
-function updateChatHistory() {
-  const chatHistory = document.getElementById('chatHistory');
-  chatHistory.innerHTML = '';
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  Object.keys(chats).forEach(chatId => {
-    const chatDiv = document.createElement('div');
-    chatDiv.className = 'chat-history-item';
-    if (chatId === currentChatId) {
-      chatDiv.classList.add('selected');
-    }
-    
-    const chatName = document.createElement('span');
-    chatName.textContent = chats[chatId].name || `Nuevo chat`;
-    chatDiv.appendChild(chatName);
-    
-    const buttonsDiv = document.createElement('div');
-    buttonsDiv.className = 'chat-history-buttons';
-    
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Eliminar';
-    deleteButton.className = 'chat-history-button';
-    deleteButton.onclick = (e) => {
-      e.stopPropagation();
-      deleteChat(chatId);
-    };
-    
-    if (debugMode) {
-      const eyeballButton = document.createElement('button');
-      eyeballButton.innerHTML = '👁️';
-      eyeballButton.className = 'eyeball-button';
-      eyeballButton.onclick = (e) => {
-        e.stopPropagation();
-        showChatData(chatId);
-      };
-      buttonsDiv.appendChild(eyeballButton);
-    }
-    
-    buttonsDiv.appendChild(deleteButton);
-    
-    chatDiv.appendChild(buttonsDiv);
-    chatHistory.appendChild(chatDiv);
-    
-    chatDiv.onclick = () => loadChat(chatId);
-  });
-}
-
-function loadChat(chatId) {
-  if (currentChatId === chatId) return; // No recargar si ya es el chat actual
-  currentChatId = chatId;
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  const chatMessages = chats[chatId].messages || [];
-  const chatArea = document.getElementById('chat-area');
-  chatArea.innerHTML = '';
-  chatMessages.forEach(message => addMessage(message.role, message.content));
-  updateChatHistory(); // Actualizar para mostrar el chat seleccionado
-}
-
-function deleteChat(chatId) {
-  if (confirm('¿Estás seguro de que quieres eliminar este chat?')) {
-    const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-    delete chats[chatId];
-    localStorage.setItem('aiChats', JSON.stringify(chats));
-    if (currentChatId === chatId) {
-      startNewChat();
-    } else {
-      updateChatHistory();
-    }
-  }
-}
-
-function showChatData(chatId) {
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  const chatData = chats[chatId];
-  const totalCharCount = chatData.messages.reduce((count, message) => count + message.content.length, 0);
-  
-  let popupContent = `ID del Chat: ${chatId}\n`;
-  popupContent += `Nombre del Chat: ${chatData.name}\n`;
-  popupContent += `Recuento Total de Caracteres: ${totalCharCount}\n\n`;
-  popupContent += `Mensajes:\n`;
-  chatData.messages.forEach((message, index) => {
-    popupContent += `\n[${index + 1}] ${message.role}: ${message.content}\n`;
-  });
-
-  document.getElementById('popupContent').textContent = popupContent;
-  document.getElementById('popup').style.display = 'block';
-  document.getElementById('overlay').style.display = 'block';
-}
-
-function closePopup() {
-  document.getElementById('popup').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
-}
-
-// Obtener modelos de IA
-fetch('https://api.discord.rocks/v1/models')
-  .then(response => response.json())
-  .then(data => {
-    const select = document.getElementById('modelSelect');
-    select.innerHTML = ''; // Limpiar opción de carga
-    data.data.forEach(model => {
-      const option = document.createElement('option');
-      option.value = model.id;
-      option.textContent = model.id;
-      select.appendChild(option);
+function addCopyButton(messageElement, text) {
+  const copyButton = document.createElement('button');
+  copyButton.textContent = currentLanguage === 'es' ? 'Copiar' : 'Copy';
+  copyButton.classList.add('copy-button');
+  copyButton.addEventListener('click', () => {
+    navigator.clipboard.writeText(text).then(() => {
+      copyButton.textContent = currentLanguage === 'es' ? '¡Copiado!' : 'Copied!';
+      setTimeout(() => {
+        copyButton.textContent = currentLanguage === 'es' ? 'Copiar' : 'Copy';
+      }, 2000);
     });
-    select.value = 'llama-3-70b-chat-turbo';
-    selectedModel = 'llama-3-70b-chat-turbo';
-  })
-  .catch(error => console.error('Error al obtener modelos de IA:', error));
+  });
+  messageElement.appendChild(copyButton);
+}
 
-// Manejar selección de modelo
-document.getElementById('modelSelect').addEventListener('change', (event) => {
-  selectedModel = event.target.value;
-});
+function addCodeBlock(messageElement, code) {
+  const codeBlock = document.createElement('pre');
+  codeBlock.classList.add('code-block');
+  codeBlock.textContent = code;
+  
+  const codeCopyButton = document.createElement('button');
+  codeCopyButton.textContent = currentLanguage === 'es' ? 'Copiar código' : 'Copy code';
+  codeCopyButton.classList.add('code-copy-button');
+  codeCopyButton.addEventListener('click', () => {
+    navigator.clipboard.writeText(code).then(() => {
+      codeCopyButton.textContent = currentLanguage === 'es' ? '¡Código copiado!' : 'Code copied!';
+      setTimeout(() => {
+        codeCopyButton.textContent = currentLanguage === 'es' ? 'Copiar código' : 'Copy code';
+      }, 2000);
+    });
+  });
+  
+  messageElement.insertBefore(codeBlock, messageElement.firstChild);
+  messageElement.insertBefore(codeCopyButton, codeBlock.nextSibling);
+}
 
-// Manejar clic en el botón de enviar y presionar Enter
-function sendMessage() {
-  const userInput = document.getElementById('userInput');
-  const message = userInput.value.trim();
-  if (message) {
-    addMessage('user', message);
-    sendMessageToAI(message);
+async function getAIResponse(userMessage) {
+  const typingMessage = addMessage('ai', '');
+  isGenerating = true;
+  sendButton.textContent = currentLanguage === 'es' ? 'Detener' : 'Stop';
+  
+  try {
+    controller = new AbortController();
+    const signal = controller.signal;
+    
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messages: conversationLog,
+      }),
+      signal: signal
+    });
+    
+    if (!response.ok) {
+      throw new Error('La respuesta de la red no fue correcta');
+    }
+    
+    const reader = response.body.getReader();
+    let partialResponse = '';
+    
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      const newText = new TextDecoder().decode(value);
+      await typeText(typingMessage, newText);
+      partialResponse += newText;
+    }
+    
+    if (partialResponse === '') {
+      let lastUserMessage = conversationLog[conversationLog.length - 1].content;
+      let repromptMessage = `${currentSystemPrompt} El último mensaje fue: "${lastUserMessage}". Por favor, proporciona una respuesta profesional y concisa.`;
+      
+      conversationLog.push({ role: 'system', content: repromptMessage });
+      
+      chatContainer.removeChild(typingMessage);
+      return getAIResponse(userMessage);
+    }
+    
+    conversationLog.push({ role: 'assistant', content: partialResponse });
+    addCopyButton(typingMessage, partialResponse);
+    
+    // Detectar y agregar bloques de código
+    const codeRegex = /```[\s\S]*?```/g;
+    const codeMatches = partialResponse.match(codeRegex);
+    if (codeMatches) {
+      codeMatches.forEach(codeMatch => {
+        const code = codeMatch.replace(/```/g, '').trim();
+        addCodeBlock(typingMessage, code);
+      });
+    }
+    
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.log('Fetch aborted');
+    } else {
+      console.error('Error:', error);
+      chatContainer.removeChild(typingMessage);
+      const errorMessage = addMessage('system', '');
+      await typeText(errorMessage, currentLanguage === 'es' ? 'Lo siento, ha ocurrido un error. Por favor, inténtelo de nuevo.' : 'Sorry, an error occurred. Please try again.');
+    }
+  } finally {
+    isGenerating = false;
+    sendButton.textContent = currentLanguage === 'es' ? 'Enviar' : 'Send';
+    controller = null;
+  }
+}
+
+chatForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (isGenerating) {
+    if (controller) {
+      controller.abort();
+    }
+    return;
+  }
+  const userMessage = userInput.value.trim();
+  if (userMessage) {
+    const userMessageElement = addMessage('user', '');
+    await typeText(userMessageElement, userMessage);
+    conversationLog.push({ role: 'user', content: userMessage });
+    await getAIResponse(userMessage);
     userInput.value = '';
   }
-}
-
-document.getElementById('sendButton').addEventListener('click', sendMessage);
-document.getElementById('userInput').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage();
-  }
 });
 
-function sendMessageToAI(message) {
-  const loadingSpinner = addLoadingSpinner();
-  fetch('https://api.discord.rocks/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: selectedModel,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...getCurrentChatMessages(),
-        { role: 'user', content: message }
-      ],
-      max_tokens: 150
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    loadingSpinner.remove();
-    if (data.choices && data.choices.length > 0) {
-      addMessage('assistant', data.choices[0].message.content);
-    } else {
-      addMessage('system', 'Lo siento, no pude generar una respuesta.');
+languageSelect.addEventListener('change', async (e) => {
+  const language = e.target.value;
+  currentLanguage = language;
+  if (language === 'es') {
+    currentSystemPrompt = defaultSystemPrompt;
+    updateLanguage('es');
+  } else if (language === 'en') {
+    currentSystemPrompt = "You are PoloGPT, a professional and efficient virtual assistant. Provide clear and concise answers, maintaining a formal and respectful tone. Adapt your style to be informative and helpful.";
+    updateLanguage('en');
+  }
+  const systemMessage = addMessage('system', '');
+  await typeText(systemMessage, language === 'es' ? 'Idioma cambiado a Español.' : 'Language changed to English.');
+});
+
+function updateLanguage(lang) {
+  const translations = {
+    'es': {
+      'title': 'PoloGPT',
+      'inputPlaceholder': 'Escribe tu mensaje aquí...',
+      'sendButton': 'Enviar',
+      'stopButton': 'Detener',
+      'darkTheme': 'Oscuro',
+      'lightTheme': 'Claro',
+      'copyButton': 'Copiar',
+      'copiedMessage': '¡Copiado!',
+      'copyCodeButton': 'Copiar código',
+      'copiedCodeMessage': '¡Código copiado!'
+    },
+    'en': {
+      'title': 'PoloGPT',
+      'inputPlaceholder': 'Type your message here...',
+      'sendButton': 'Send',
+      'stopButton': 'Stop',
+      'darkTheme': 'Dark',
+      'lightTheme': 'Light',
+      'copyButton': 'Copy',
+      'copiedMessage': 'Copied!',
+      'copyCodeButton': 'Copy code',
+      'copiedCodeMessage': 'Code copied!'
     }
-  })
-  .catch(error => {
-    loadingSpinner.remove();
-    console.error('Error al enviar mensaje a la IA:', error);
-    addMessage('system', 'Lo siento, hubo un error al comunicarse con la IA.');
+  };
+
+  document.title = translations[lang].title;
+  document.querySelector('h1').textContent = translations[lang].title;
+  userInput.placeholder = translations[lang].inputPlaceholder;
+  sendButton.textContent = isGenerating ? translations[lang].stopButton : translations[lang].sendButton;
+  themeSwitch.options[0].text = translations[lang].darkTheme;
+  themeSwitch.options[1].text = translations[lang].lightTheme;
+  
+  // Update copy buttons
+  document.querySelectorAll('.copy-button').forEach(button => {
+    button.textContent = translations[lang].copyButton;
+  });
+
+  // Update code copy buttons
+  document.querySelectorAll('.code-copy-button').forEach(button => {
+    button.textContent = translations[lang].copyCodeButton;
   });
 }
 
-function getCurrentChatMessages() {
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  return currentChatId && chats[currentChatId] ? chats[currentChatId].messages : [];
-}
-
-// Botón de Nuevo Chat
-document.getElementById('newChatButton').addEventListener('click', startNewChat);
-
-// Botón de Depuración
-document.getElementById('debugButton').addEventListener('click', () => {
-  debugMode = !debugMode;
-  updateChatHistory();
+themeSwitch.addEventListener('change', (e) => {
+  if (e.target.value === 'light') {
+    document.body.classList.add('light-theme');
+  } else {
+    document.body.classList.remove('light-theme');
+  }
 });
 
-// Inicializar
-updateChatHistory();
-if (!currentChatId) {
-  startNewChat();
-} else {
-  loadChat(currentChatId);
-}
-
-// Cerrar popup al hacer clic fuera
-document.getElementById('overlay').addEventListener('click', closePopup);
+(async function init() {
+  const welcomeMessage = addMessage('system', '');
+  await typeText(welcomeMessage, 'Bienvenido a PoloGPT. ¿En qué puedo ayudarte hoy?');
+  conversationLog.push({ role: 'system', content: currentSystemPrompt });
+})();
 </script>
 </body></html>
