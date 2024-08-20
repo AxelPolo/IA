@@ -1,883 +1,333 @@
-<html><head><base href=""><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PoloGPT - Tu Asistente IA Personalizado</title><style>
-:root {
-  --primary-color: #4a90e2;
-  --secondary-color: #f5a623;
-  --background-color: #f0f8ff;
-  --text-color: #333333;
-  --accent-color: #e74c3c;
-  --success-color: #2ecc71;
-  --warning-color: #f39c12;
-  --info-color: #3498db;
-  --light-gray: #ecf0f1;
-  --dark-gray: #34495e;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
-}
-
-.dark-mode {
-  --primary-color: #3a7bd5;
-  --secondary-color: #f5a623;
-  --background-color: #1a1a2e;
-  --text-color: #e0e0e0;
-  --accent-color: #e74c3c;
-  --success-color: #27ae60;
-  --warning-color: #f39c12;
-  --info-color: #2980b9;
-  --light-gray: #2c3e50;
-  --dark-gray: #bdc3c7;
-}
-
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: var(--transition);
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.sidebar {
-  width: 300px;
-  background-color: var(--light-gray);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  transition: var(--transition);
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--primary-color);
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 28px;
-  color: var(--primary-color);
-}
-
-.chat-area {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  background-color: var(--background-color);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-}
-
-.message {
-  margin-bottom: 15px;
-  padding: 10px 15px;
-  border-radius: 20px;
-  max-width: 80%;
-  position: relative;
-  transition: var(--transition);
-  opacity: 0;
-  animation: fadeIn 0.5s ease-in-out forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.user {
-  background-color: var(--primary-color);
-  color: white;
-  align-self: flex-end;
-  margin-left: auto;
-}
-
-.assistant {
-  background-color: var(--light-gray);
-  color: var(--text-color);
-}
-
-.system {
-  background-color: var(--info-color);
-  color: white;
-  text-align: center;
-  max-width: 100%;
-}
-
-.input-area {
-  display: flex;
-  margin-top: 20px;
-}
-
-#userInput {
-  flex: 1;
-  padding: 15px;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  background-color: var(--light-gray);
-  color: var(--text-color);
-  transition: var(--transition);
-}
-
-#sendButton {
-  margin-left: 10px;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 25px;
-  background-color: var(--primary-color);
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-#sendButton:hover {
-  background-color: var(--secondary-color);
-}
-
-.new-chat-button {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: var(--success-color);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.new-chat-button:hover {
-  background-color: var(--secondary-color);
-}
-
-.chat-history-item {
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: var(--background-color);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chat-history-item:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.chat-history-item.selected {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.discord-button {
-  width: 100%;
-  padding: 15px;
-  margin-top: auto;
-  background-color: #7289DA;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.discord-button:hover {
-  background-color: #5c6fb1;
-}
-
-.discord-logo {
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
-}
-
-#messageCounter {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 10px 15px;
-  border-radius: 20px;
-  font-size: 14px;
-  transition: var(--transition);
-}
-
-.typing-indicator {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.typing-indicator span {
-  height: 8px;
-  width: 8px;
-  margin: 0 2px;
-  background-color: var(--text-color);
-  display: block;
-  border-radius: 50%;
-  opacity: 0.4;
-  animation: typing 1s infinite;
-}
-
-@keyframes typing {
-  0% {
-    transform: translateY(0px);
-  }
-  28% {
-    transform: translateY(-5px);
-  }
-  44% {
-    transform: translateY(0px);
-  }
-}
-
-.typing-indicator span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-indicator span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-
-  .main-content {
-    height: calc(100vh - 200px);
-  }
-}
-
-.discord-link {
-  color: #7289DA;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.discord-link:hover {
-  color: #5c6fb1;
-}
-
-.footer {
-  text-align: center;
-  font-size: 12px;
-  color: var(--text-color);
-  opacity: 0.7;
-  margin-top: 20px;
-}
-
-.mode-selector {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
-}
-
-.mode-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 20px;
-  background-color: var(--light-gray);
-  color: var(--text-color);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.mode-button.active {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.mode-button:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.config-button {
-  background: none;
-  border: none;
-  color: var(--text-color);
-  font-size: 24px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.config-button:hover {
-  color: var(--primary-color);
-}
-
-.config-menu {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background-color: var(--light-gray);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: var(--shadow);
-  z-index: 1000;
-}
-
-.config-menu.show {
-  display: block;
-}
-
-.theme-toggle-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.theme-toggle-label {
-  margin-right: 10px;
-}
-
-.theme-toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.theme-toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.theme-toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.theme-toggle-slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .theme-toggle-slider {
-  background-color: var(--primary-color);
-}
-
-input:checked + .theme-toggle-slider:before {
-  transform: translateX(26px);
-}
-
-.theme-toggle-icon {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-}
-
-.theme-toggle-icon.sun {
-  left: 10px;
-}
-
-.theme-toggle-icon.moon {
-  right: 10px;
-}
-
-.show-more-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: var(--light-gray);
-  color: var(--text-color);
-  border: none;
-  border-radius: 25px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.show-more-button:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-.chat-history-modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.4);
-}
-
-.chat-history-modal-content {
-  background-color: var(--background-color);
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid var(--light-gray);
-  width: 80%;
-  max-width: 600px;
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-}
-
-.close-modal {
-  color: var(--text-color);
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close-modal:hover,
-.close-modal:focus {
-  color: var(--primary-color);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.chat-history-list {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-top: 20px;
-}
-
-.delete-button {
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-.delete-button:hover {
-  background-color: #c0392b;
-}
-</style></head><body>
-<div class="container">
-  <div class="sidebar">
-    <button class="new-chat-button" id="newChatButton">Nuevo Chat</button>
-    <div class="mode-selector">
-      <button class="mode-button active" data-mode="general">General</button>
-      <button class="mode-button" data-mode="creativo">Creativo</button>
-      <button class="mode-button" data-mode="profesional">Profesional</button>
-    </div>
-    <div id="chatHistory"></div>
-    <button class="show-more-button" id="showMoreButton">Mostrar más</button>
-    <button class="discord-button" id="discordButton">
-      <img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord logo" class="discord-logo">
-      Únete a Discord
-    </button>
-  </div>
-  <div class="main-content">
-    <div class="header">
-      <h1>PoloGPT - Tu Asistente IA</h1>
-      <button class="config-button" id="configButton">⚙️</button>
-    </div>
-    <div class="chat-area" id="chat-area">
-      <!-- Los mensajes del chat se insertarán aquí -->
-    </div>
-    <div class="input-area">
-      <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí...">
-      <button id="sendButton">Enviar</button>
-    </div>
-    <div class="footer">
-      PoloGPT - Asistente IA gratuito. Versión de prueba para investigación. Tu retroalimentación nos ayuda a mejorar.
-    </div>
-  </div>
-</div>
-
-<div id="messageCounter">Mensajes restantes: 50</div>
-
-<div class="config-menu" id="configMenu">
-  <div class="theme-toggle-container">
-    <span class="theme-toggle-label">Tema:</span>
-    <label class="theme-toggle-switch">
-      <input type="checkbox" id="themeToggle">
-      <span class="theme-toggle-slider">
-        <span class="theme-toggle-icon sun">☀️</span>
-        <span class="theme-toggle-icon moon">🌙</span>
-      </span>
-    </label>
-  </div>
-  <!-- Aquí puedes agregar más opciones de configuración si lo deseas -->
-</div>
-
-<div id="chatHistoryModal" class="chat-history-modal">
-  <div class="chat-history-modal-content">
-    <span class="close-modal">&times;</span>
-    <h2>Historial de Chats</h2>
-    <div id="chatHistoryList" class="chat-history-list">
-      <!-- Los chats del historial se insertarán aquí -->
-    </div>
-  </div>
-</div>
-
-<script>
-const systemPrompt = `Eres PoloGPT, un asistente de IA amigable y servicial. Responde de manera útil, respetuosa y honesta. Siempre te identificas como PoloGPT. En cada respuesta, menciona brevemente nuestro Discord y anima al usuario a unirse para obtener más información o ayuda.`;
-let currentChatId = null;
-let messageCount = 50;
-let isGenerating = false;
-let currentMode = 'general';
-
-function generateUniqueId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
-function addMessage(role, content) {
-  const chatArea = document.getElementById('chat-area');
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `message ${role}`;
-  const prefix = role === 'user' ? 'Tú: ' : (role === 'assistant' ? 'PoloGPT: ' : '');
-  messageDiv.textContent = prefix + content;
-
-  if (role === 'assistant') {
-    const discordLink = ' <a href="https://discord.com/invite/MM5gV65GFg" class="discord-link" target="_blank">Únete a nuestro Discord</a> para más información y ayuda.';
-    messageDiv.innerHTML += discordLink;
-  }
-
-  chatArea.appendChild(messageDiv);
-  chatArea.scrollTop = chatArea.scrollHeight;
-
-  if (currentChatId) {
-    let chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-    if (!chats[currentChatId]) {
-      chats[currentChatId] = { messages: [], name: null, mode: currentMode };
+<html><head><base href="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PoloGPT</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f0f0f0;
+      display: grid;
+      place-content: center;
+      height: 100dvh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
     }
-    chats[currentChatId].messages.push({role, content});
-    localStorage.setItem('aiChats', JSON.stringify(chats));
-    updateChatHistory();
-  }
 
-  if (role === 'user') {
-    updateMessageCounter();
-  }
-}
-
-function updateMessageCounter() {
-  messageCount--;
-  document.getElementById('messageCounter').textContent = `Mensajes restantes: ${messageCount}`;
-  
-  if (messageCount <= 0) {
-    endConversation();
-  }
-}
-
-function endConversation() {
-  addMessage('system', 'La conversación ha terminado. Has alcanzado el límite de mensajes.');
-  document.getElementById('userInput').disabled = true;
-  document.getElementById('sendButton').disabled = true;
-}
-
-function addLoadingSpinner() {
-  const chatArea = document.getElementById('chat-area');
-  const spinnerDiv = document.createElement('div');
-  spinnerDiv.className = 'message system';
-  spinnerDiv.innerHTML = 'PoloGPT está procesando<div class="typing-indicator"><span></span><span></span><span></span></div>';
-  chatArea.appendChild(spinnerDiv);
-  chatArea.scrollTop = chatArea.scrollHeight;
-  return spinnerDiv;
-}
-
-function startNewChat() {
-  currentChatId = generateUniqueId();
-  document.getElementById('chat-area').innerHTML = '';
-  addMessage('system', `¡Hola! Soy PoloGPT en modo ${currentMode}. ¿En qué puedo ayudarte hoy? Recuerda que puedes unirte a nuestro Discord para obtener más ayuda y compartir experiencias.`);
-  updateChatHistory();
-  messageCount = 50;
-  document.getElementById('messageCounter').textContent = `Mensajes restantes: ${messageCount}`;
-  document.getElementById('userInput').disabled = false;
-  document.getElementById('sendButton').disabled = false;
-}
-
-function updateChatHistory() {
-  const chatHistory = document.getElementById('chatHistory');
-  chatHistory.innerHTML = '';
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  const chatIds = Object.keys(chats).reverse();
-  const visibleChats = chatIds.slice(0, 3);
-  
-  visibleChats.forEach(chatId => {
-    const chatDiv = createChatHistoryItem(chatId, chats[chatId]);
-    chatHistory.appendChild(chatDiv);
-  });
-  
-  document.getElementById('showMoreButton').style.display = chatIds.length > 3 ? 'block' : 'none';
-}
-
-function createChatHistoryItem(chatId, chat) {
-  const chatDiv = document.createElement('div');
-  chatDiv.className = 'chat-history-item';
-  if (chatId === currentChatId) {
-    chatDiv.classList.add('selected');
-  }
-  chatDiv.textContent = chat.name || 'Chat sin nombre';
-  chatDiv.onclick = () => loadChat(chatId);
-  
-  const deleteButton = document.createElement('button');
-  deleteButton.className = 'delete-button';
-  deleteButton.textContent = '🗑️';
-  deleteButton.onclick = (e) => {
-    e.stopPropagation();
-    deleteChat(chatId);
-  };
-  
-  chatDiv.appendChild(deleteButton);
-  return chatDiv;
-}
-
-function loadChat(chatId) {
-  if (currentChatId === chatId) return;
-  currentChatId = chatId;
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  const chatMessages = chats[chatId].messages || [];
-  const chatArea = document.getElementById('chat-area');
-  chatArea.innerHTML = '';
-  chatMessages.forEach(message => addMessage(message.role, message.content));
-  updateChatHistory();
-  
-  messageCount = Math.max(50 - chatMessages.filter(m => m.role === 'user').length, 0);
-  document.getElementById('messageCounter').textContent = `Mensajes restantes: ${messageCount}`;
-  
-  document.getElementById('userInput').disabled = messageCount <= 0;
-  document.getElementById('sendButton').disabled = messageCount <= 0;
-  
-  currentMode = chats[chatId].mode || 'general';
-  updateModeButtons();
-}
-
-function deleteChat(chatId) {
-  if (confirm('¿Estás seguro de que quieres eliminar este chat?')) {
-    const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-    delete chats[chatId];
-    localStorage.setItem('aiChats', JSON.stringify(chats));
-    if (currentChatId === chatId) {
-      startNewChat();
-    } else {
-      updateChatHistory();
+    main {
+      width: 400px;
+      max-width: 100%;
+      height: 70vh;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 8px;
+      margin-bottom: 16px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
     }
-  }
-}
 
-function sendMessage() {
-  const userInput = document.getElementById('userInput');
-  const message = userInput.value.trim();
-  if (message && messageCount > 0 && !isGenerating) {
-    addMessage('user', message);
-    userInput.value = '';
-    sendMessageToAI(message);
-  }
-}
+    ul {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-function sendMessageToAI(message) {
-  isGenerating = true;
-  document.getElementById('sendButton').disabled = true;
-  const loadingSpinner = addLoadingSpinner();
-  
-  fetch('https://api.discord.rocks/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'llama-3-70b-chat-turbo',
-      messages: [
-        { role: 'system', content: `${systemPrompt} Modo actual: ${currentMode}` },
-        ...getCurrentChatMessages(),
-        { role: 'user', content: message }
-      ],
-      max_tokens: 1000000
+    .message {
+      display: flex;
+      flex-direction: column;
+      margin: 4px 0;
+      padding: 4px 8px;
+    }
+
+    .message span {
+      width: 36px;
+      height: 36px;
+      background: #eee;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 999999px;
+    }
+
+    .message p {
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-top: 4px;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message.user span,
+    .message.user p {
+      background: rgb(219, 236, 255);
+    }
+
+    .message.bot {
+      align-self: flex-start;
+    }
+
+    .message.bot span,
+    .message.bot p {
+      background: rgb(198, 255, 220);
+    }
+
+    form {
+      display: flex;
+      margin-top: 16px;
+    }
+
+    input {
+      border-radius: 999999px;
+      flex-grow: 1;
+      border: 0;
+      padding: 8px;
+      margin-right: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #09f;
+      border: 0;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 8px;
+      transition: background .3s ease;
+    }
+
+    button[disabled] {
+      background: #ccc;
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    button:hover {
+      background: rgb(0, 104, 173);
+    }
+
+    small {
+      font-size: 10px;
+      color: #555;
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 400px;
+      text-align: center;
+    }
+
+    .loading {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 50%;
+    }
+
+    .loading i {
+      pointer-events: none;
+      width: 2.5em;
+      height: 2.5em;
+      border: 0.4em solid transparent;
+      border-color: #eee;
+      border-top-color: #3E67EC;
+      border-radius: 50%;
+      animation: loadingspin 1s linear infinite;
+    }
+
+    .loading h4 {
+      color: #444;
+      margin-bottom: 8px;
+    }
+
+    .loading h5 {
+      font-weight: 400;
+      margin: 0;
+      font-size: 10px;
+      opacity: .4;
+    }
+
+    @keyframes loadingspin {
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+
+    #stopButton {
+      background: #f44336;
+      display: none;
+    }
+
+    #stopButton:hover {
+      background: #d32f2f;
+    }
+  </style>
+
+  <script type="module">
+    import { CreateMLCEngine } from "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.46/+esm"
+
+    const $ = el => document.querySelector(el)
+
+    const $form = $('form')
+    const $input = $('input')
+    const $template = $('#message-template')
+    const $messages = $('ul')
+    const $container = $('main')
+    const $button = $('button')
+    const $stopButton = $('#stopButton')
+    const $info = $('small')
+    const $loading = $('.loading')
+
+    let messages = []
+    let end = false
+    let isGenerating = false
+    let abortController = null
+
+    const SELECTED_MODEL = 'Llama-3-8B-Instruct-q4f32_1-MLC-1k'
+
+    const engine = await CreateMLCEngine(
+      SELECTED_MODEL,
+      {
+        initProgressCallback: (info) => {
+          $info.textContent = info.text
+          if (info.progress === 1 && !end) {
+            end = true
+            $loading?.parentNode?.removeChild($loading)
+            $button.removeAttribute('disabled')
+            addMessage("¡Hola! Soy APOLO, un modelo de lenguaje que se ejecuta completamente en tu navegador. ¿En qué puedo ayudarte hoy?", 'bot')
+            $input.focus()
+          }
+        }
+      }
+    )
+
+    $form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      const messageText = $input.value.trim()
+
+      if (messageText !== '') {
+        $input.value = ''
+      }
+
+      addMessage(messageText, 'user')
+      $button.setAttribute('disabled', '')
+      $stopButton.style.display = 'inline-block'
+
+      const userMessage = {
+        role: 'user',
+        content: messageText
+      }
+
+      messages.push(userMessage)
+
+      isGenerating = true
+      abortController = new AbortController()
+
+      try {
+        const chunks = await engine.chat.completions.create({
+          messages,
+          stream: true,
+          signal: abortController.signal
+        })
+
+        let reply = ""
+
+        const $botMessage = addMessage("", 'bot')
+
+        for await (const chunk of chunks) {
+          if (!isGenerating) break
+          const choice = chunk.choices[0]
+          const content = choice?.delta?.content ?? ""
+          reply += content
+          $botMessage.textContent = reply
+        }
+
+        if (isGenerating) {
+          messages.push({
+            role: 'assistant',
+            content: reply
+          })
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          console.log('Generation aborted')
+        } else {
+          console.error('Error during generation:', error)
+        }
+      } finally {
+        isGenerating = false
+        $button.removeAttribute('disabled')
+        $stopButton.style.display = 'none'
+        $container.scrollTop = $container.scrollHeight
+      }
     })
-  })
-  .then(response => response.json())
-  .then(data => {
-    loadingSpinner.remove();
-    if (data.choices && data.choices.length > 0) {
-      let aiResponse = data.choices[0].message.content;
-      addMessage('assistant', aiResponse);
-      updateChatName(message, aiResponse);
-    } else {
-      addMessage('system', 'Lo siento, no pude generar una respuesta.');
+
+    $stopButton.addEventListener('click', () => {
+      if (isGenerating && abortController) {
+        abortController.abort()
+        isGenerating = false
+        $button.removeAttribute('disabled')
+        $stopButton.style.display = 'none'
+      }
+    })
+
+    function addMessage(text, sender) {
+      const clonedTemplate = $template.content.cloneNode(true)
+      const $newMessage = clonedTemplate.querySelector('.message')
+
+      const $who = $newMessage.querySelector('span')
+      const $text = $newMessage.querySelector('p')
+
+      $text.textContent = text
+      $who.textContent = sender === 'bot' ? 'Llama' : 'Tú'
+      $newMessage.classList.add(sender)
+
+      $messages.appendChild($newMessage)
+
+      $container.scrollTop = $container.scrollHeight
+
+      return $text
     }
-  })
-  .catch(error => {
-    loadingSpinner.remove();
-    console.error('Error al enviar mensaje a la IA:', error);
-    addMessage('system', 'Lo siento, hubo un error al comunicarse con PoloGPT.');
-  })
-  .finally(() => {
-    isGenerating = false;
-    document.getElementById('sendButton').disabled = false;
-  });
-}
+  </script>
+</head>
 
-function updateChatName(userMessage, aiResponse) {
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  if (currentChatId && chats[currentChatId] && !chats[currentChatId].name) {
-    const context = userMessage + ' ' + aiResponse;
-    const possibleName = context.split(' ').slice(0, 5).join(' ') + '...';
-    chats[currentChatId].name = possibleName;
-    chats[currentChatId].mode = currentMode;
-    localStorage.setItem('aiChats', JSON.stringify(chats));
-    updateChatHistory();
-  }
-}
+<body>
+  <main>
+    <ul>
+      <li class="loading">
+        <i></i>
+        <h4>Cargando PoloGPT...</h4>
+        <h5>Esto puede tardar un poco. Paciencia.</h5>
+      </li>
+    </ul>
+  </main>
 
-function getCurrentChatMessages() {
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  return currentChatId && chats[currentChatId] ? chats[currentChatId].messages : [];
-}
+  <form>
+    <input placeholder="Escribe tu mensaje aquí...">
+    <button type="submit">Enviar</button>
+    <button type="button" id="stopButton">Detener</button>
+  </form>
 
-document.getElementById('sendButton').addEventListener('click', sendMessage);
-document.getElementById('userInput').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage();
-  }
-});
+  <small>&nbsp;</small>
 
-document.getElementById('newChatButton').addEventListener('click', startNewChat);
-
-function toggleTheme() {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-}
-
-document.getElementById('themeToggle').addEventListener('change', toggleTheme);
-
-if (localStorage.getItem('theme') === 'dark') {
-  document.body.classList.add('dark-mode');
-  document.getElementById('themeToggle').checked = true;
-}
-
-function joinDiscord() {
-  window.open('https://discord.gg/MM5gV65GFg', '_blank');
-}
-
-document.getElementById('discordButton').addEventListener('click', joinDiscord);
-
-document.getElementById('chat-area').addEventListener('click', function(event) {
-  if (event.target.classList.contains('discord-link')) {
-    event.preventDefault();
-    window.open(event.target.href, '_blank');
-  }
-});
-
-function updateModeButtons() {
-  document.querySelectorAll('.mode-button').forEach(button => {
-    button.classList.remove('active');
-    if (button.dataset.mode === currentMode) {
-      button.classList.add('active');
-    }
-  });
-}
-
-document.querySelectorAll('.mode-button').forEach(button => {
-  button.addEventListener('click', function() {
-    currentMode = this.dataset.mode;
-    updateModeButtons();
-    addMessage('system', `Modo cambiado a: ${currentMode}`);
-  });
-});
-
-document.getElementById('configButton').addEventListener('click', function() {
-  document.getElementById('configMenu').classList.toggle('show');
-});
-
-// Cerrar el menú de configuración si se hace clic fuera de él
-window.addEventListener('click', function(event) {
-  if (!event.target.matches('.config-button') && !event.target.closest('.config-menu')) {
-    document.getElementById('configMenu').classList.remove('show');
-  }
-});
-
-document.getElementById('showMoreButton').addEventListener('click', function() {
-  const modal = document.getElementById('chatHistoryModal');
-  const chatHistoryList = document.getElementById('chatHistoryList');
-  chatHistoryList.innerHTML = '';
-  
-  const chats = JSON.parse(localStorage.getItem('aiChats')) || {};
-  const chatIds = Object.keys(chats).reverse();
-  
-  chatIds.forEach(chatId => {
-    const chatDiv = createChatHistoryItem(chatId, chats[chatId]);
-    chatHistoryList.appendChild(chatDiv);
-  });
-  
-  modal.style.display = 'block';
-});
-
-document.querySelector('.close-modal').addEventListener('click', function() {
-  document.getElementById('chatHistoryModal').style.display = 'none';
-});
-
-window.addEventListener('click', function(event) {
-  const modal = document.getElementById('chatHistoryModal');
-  if (event.target == modal) {
-    modal.style.display = 'none';
-  }
-});
-
-updateChatHistory();
-if (!currentChatId) {
-  startNewChat();
-} else {
-  loadChat(currentChatId);
-}
-updateModeButtons();
-</script>
-</body></html>
+  <template id="message-template">
+    <li class="message">
+      <span></span>
+      <p></p>
+    </li>
+  </template>
+</body>
+</html>
